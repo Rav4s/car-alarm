@@ -1,4 +1,4 @@
-/ Include RadioHead Amplitude Shift Keying Library
+// Include RadioHead Amplitude Shift Keying Library
 #include <RH_ASK.h>
 // Include dependant SPI Library
 #include <SPI.h>
@@ -17,7 +17,7 @@ void setup()
 void loop()
 {
   // Set buffer to size of expected message
-  uint8_t buf[4];
+  uint8_t buf[3];
   uint8_t buflen = sizeof(buf);
   // Check if received packet is correct size
   if (rf_driver.recv(buf, &buflen))
