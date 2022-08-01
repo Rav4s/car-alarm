@@ -6,16 +6,29 @@
 // Create Amplitude Shift Keying Object
 RH_ASK rf_driver;
 
+// System is unarmed by default
+boolean armed = false;
+
 void setup()
 {
   // Initialize ASK Object
   rf_driver.init();
-
-  // System is unarmed by default
-  boolean armed = false;
   
   // Setup Serial Monitor
   Serial.begin(9600);
+}
+
+void checkMessage(String message) {
+  message.trim();
+  Serial.println(message);
+  
+  if(message == "01") {
+    arm();
+  } else if(message == "00") {
+    disarm();
+  } else {
+    Serial.println("Error!");
+  }
 }
 
 void trigRelay() {
@@ -42,8 +55,9 @@ void loop()
   {
     int length = strlen(buf);
     buf[length - 1] = '\0';
-    Serial.println((char*)buf);
+    String message = (char*)buf;
+    checkMessage(message);
   }
 
-  delay(1000);
+  delay(10);
 }
