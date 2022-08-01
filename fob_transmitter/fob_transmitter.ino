@@ -27,9 +27,9 @@ void loop()
     const char *msg = "01";
     rf_driver.send((uint8_t *)msg, strlen(msg));
     rf_driver.waitPacketSent();
-    delay(500);
+    delay(1000);
     msg = "00";
     rf_driver.send((uint8_t *)msg, strlen(msg));
     rf_driver.waitPacketSent();
-    delay(500);
+    delay(1000);
 }
