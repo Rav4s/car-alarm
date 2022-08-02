@@ -12,6 +12,10 @@ boolean armed = false;
 // Relay trigger pin
 const int RELAY_PIN = 3;
 
+// Reed switches input
+const int reedInput = 8;
+int switchVal = 0;
+
 void setup()
 {
   // Initialize ASK Object
@@ -21,11 +25,28 @@ void setup()
   pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, LOW);
   delay(500);
+
+  // Set up reed switches
+  pinMode(reedInput, INPUT_PULLUP);
     
   // Setup Serial Monitor
   Serial.begin(9600);
 }
 
+
+// Check if doors are closed based on reed switches
+String reedSwitches() {
+  switchVal = digitalRead(reedInput);
+  if(switchVal == LOW) {
+    Serial.println("Door open");
+    return "open";
+  } else {
+    Serial.println("Door closed");
+    return "closed";
+  }
+}
+
+// Arm/disarm based on transmitted message
 void checkMessage(String message) {
   message.trim();
   Serial.println(message);
@@ -39,6 +60,7 @@ void checkMessage(String message) {
   }
 }
 
+// Trigger siren using relay
 void trigRelay(String onoff) {
   if(onoff == "on") {
     digitalWrite(RELAY_PIN, HIGH);
@@ -50,19 +72,20 @@ void trigRelay(String onoff) {
   
 }
 
+// Arm system
 void arm() {
   armed = true;
-  trigRelay("on");
   Serial.println("System armed");
 
 }
 
+// Disarm system
 void disarm() {
   armed = false;
-  trigRelay("off");
   Serial.println("System disarmed");
 }
 
+// Main
 void loop()
 {   
   // Set buffer to size of expected message
