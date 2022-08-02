@@ -64,8 +64,10 @@ void checkMessage(String message) {
 void trigRelay(String onoff) {
   if(onoff == "on") {
     digitalWrite(RELAY_PIN, HIGH);
+    Serial.println("Alarm on!");
   } else if(onoff = "off") {
     digitalWrite(RELAY_PIN, LOW);
+    Serial.println("Alarm off!");
   } else {
     Serial.println("Error! Invalid on/off command");
   }
@@ -81,6 +83,7 @@ void arm() {
 
 // Disarm system
 void disarm() {
+  trigRelay("off");
   armed = false;
   Serial.println("System disarmed");
 }
@@ -98,5 +101,9 @@ void loop()
     buf[length - 1] = '\0';
     String message = (char*)buf;
     checkMessage(message);
+  }
+
+  if(armed == true && reedSwitches() == "open") {
+    trigRelay("on");
   }
 }
